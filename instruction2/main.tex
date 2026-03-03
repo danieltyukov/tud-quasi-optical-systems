@@ -29,73 +29,6 @@ The system under analysis is a front-fed parabolic reflector antenna with the fo
 \end{itemize}
 
 %% ====================================================================
-\section{Theory}
-%% ====================================================================
-
-\subsection{Feed Far Field}
-
-The feed is a circular aperture with uniform current. Its 2D Fourier transform is the well-known Airy pattern:
-\begin{equation}\label{eq:airy}
-\tilde{J}(k_\perp) = \pi a^2 \cdot \frac{2\,J_1(k_\perp a)}{k_\perp a}
-\end{equation}
-where $J_1$ is the Bessel function of the first kind and $k_\perp = k_0\sin\theta$. The first null occurs at:
-\begin{equation}\label{eq:airy_null}
-\theta_{\text{null}} = \arcsin\!\left(\frac{1.22\,\lambda}{D_f}\right)
-\end{equation}
-
-The far field is obtained via the stationary phase evaluation using the spectral Green's function (SGF). For a $\hat{y}$-directed current, the relevant SGF column is $(G_{xy},\,G_{yy},\,G_{zy})$.
-
-\subsection{Parabolic Reflector Geometry}
-
-For a paraboloid with focal length $f$, the mapping between the aperture radial coordinate $\rho'$ and the feed angle $\theta'$ is:
-\begin{equation}\label{eq:paraboloid}
-\rho' = 2f\tan\!\left(\frac{\theta'}{2}\right), \qquad r' = \frac{2f}{1+\cos\theta'}
-\end{equation}
-The half-subtended angle for a reflector of diameter $D$ is:
-\begin{equation}\label{eq:theta0}
-\theta_0 = 2\arctan\!\left(\frac{D}{4f}\right)
-\end{equation}
-
-\subsection{Aperture Field and Equivalent Currents}
-
-The GO aperture field is obtained by projecting the feed far field onto the aperture plane with amplitude taper:
-\begin{equation}\label{eq:aperture_taper}
-\vec{E}_a(\rho',\phi') = \frac{1+\cos\theta'}{2f}\left[E_\theta^{\text{feed}}\,(\cos\theta'\cos\phi'\,\hat{x}+\cos\theta'\sin\phi'\,\hat{y}) + E_\phi^{\text{feed}}\,(-\sin\phi'\,\hat{x}+\cos\phi'\,\hat{y})\right]
-\end{equation}
-
-The equivalent surface currents (Love's equivalence) are:
-\begin{equation}\label{eq:equiv_currents}
-\vec{M}_s = -\hat{z}\times\vec{E}_a, \qquad \vec{J}_s = \hat{z}\times\vec{H}_a = -\frac{1}{\zeta}\vec{E}_a
-\end{equation}
-giving $M_x = E_{a,y}$, $M_y = -E_{a,x}$, $J_x = -E_{a,x}/\zeta$, $J_y = -E_{a,y}/\zeta$.
-
-\subsection{Reflector Far Field}
-
-The far field is computed from the aperture currents using the Balanis formulation:
-\begin{align}
-E_\theta &\propto L_\phi + \zeta\,N_\theta = (-L_x\sin\phi + L_y\cos\phi) + \zeta\,(N_x\cos\phi + N_y\sin\phi)\cos\theta \label{eq:Eth}\\
-E_\phi &\propto L_\theta - \zeta\,N_\phi = (L_x\cos\phi + L_y\sin\phi)\cos\theta + \zeta\,(N_x\sin\phi - N_y\cos\phi) \label{eq:Eph}
-\end{align}
-where $\vec{N} = \iint \vec{J}_s\,e^{j(k_x x'+k_y y')}\,dx'\,dy'$ and $\vec{L} = \iint \vec{M}_s\,e^{j(k_x x'+k_y y')}\,dx'\,dy'$.
-
-\subsection{Efficiencies}
-
-The spillover efficiency is:
-\begin{equation}\label{eq:spillover}
-\eta_s = \frac{\int_0^{\theta_0}\int_0^{2\pi} U_{\text{feed}}(\theta',\phi')\sin\theta'\,d\theta'\,d\phi'}{\int_0^{\pi/2}\int_0^{2\pi} U_{\text{feed}}(\theta',\phi')\sin\theta'\,d\theta'\,d\phi'}
-\end{equation}
-
-The taper efficiency, using the Ludwig-3 co-pol definition $E_{\text{co}} = E_\theta\sin\phi + E_\phi\cos\phi$, is:
-\begin{equation}\label{eq:taper}
-\eta_t = \frac{16}{\pi}\left(\frac{f}{D}\right)^2 \frac{\left|\int_0^{\theta_0}\int_0^{2\pi} |E_{\text{co}}|\,\tan\!\left(\frac{\theta'}{2}\right)\,d\theta'\,d\phi'\right|^2}{\int_0^{\theta_0}\int_0^{2\pi} G(\theta',\phi')\sin\theta'\,d\theta'\,d\phi'}
-\end{equation}
-
-The aperture efficiency is $\eta_{\text{ap}} = \eta_s\cdot\eta_t$, and the maximum directivity, directivity, and gain are:
-\begin{equation}\label{eq:dir_gain}
-D_{\max} = \left(\frac{\pi D}{\lambda}\right)^2, \qquad D = \eta_t\,D_{\max}, \qquad G = \eta_s\,\eta_t\,D_{\max}
-\end{equation}
-
-%% ====================================================================
 \section{Q1: Feed Far Field (1 point)}
 %% ====================================================================
 
@@ -104,6 +37,17 @@ The normalized far field patterns of the circular aperture feed are computed in 
 \item \textbf{E-plane} ($\phi=90^\circ$): contains the $\hat{y}$-axis (current polarization direction)
 \item \textbf{H-plane} ($\phi=0^\circ$): perpendicular to the current direction
 \end{itemize}
+
+The far field shape is governed by the Airy diffraction pattern, arising from the 2D Fourier transform of the uniform circular aperture:
+\begin{equation}
+\tilde{J}(k_\perp) = \pi a^2 \cdot \frac{2\,J_1(k_\perp a)}{k_\perp a}
+\end{equation}
+where $J_1$ is the Bessel function of the first kind and $k_\perp = k_0\sin\theta$. The first null occurs at:
+\begin{equation}
+\theta_{\text{null}} = \arcsin\!\left(\frac{1.22\,\lambda}{D_f}\right) = \arcsin\!\left(\frac{1.22}{4}\right) = 17.76^\circ
+\end{equation}
+
+For a $\hat{y}$-directed current, the relevant SGF column is $(G_{xy},\,G_{yy},\,G_{zy})$, and the far field is obtained via stationary phase evaluation.
 
 \begin{figure}[H]
 \centering
@@ -114,7 +58,7 @@ The normalized far field patterns of the circular aperture feed are computed in 
 
 Observations from Figure~\ref{fig:q1}:
 \begin{itemize}
-\item The far field shape is governed by the Airy pattern~\eqref{eq:airy}. The computed first null at $\theta=17.8^\circ$ matches the theoretical value from~\eqref{eq:airy_null}: $\arcsin(1.22/4)=17.76^\circ$.
+\item The computed first null at $\theta=17.8^\circ$ matches the theoretical value of $17.76^\circ$.
 \item The E-plane and H-plane patterns share the same main lobe width but differ in their sidelobe structure. In the H-plane, the SGF introduces an additional $\cos\theta$ factor on the dominant $E_\theta$ component, resulting in higher sidelobes compared to the E-plane. Conversely, the E-plane shows deeper nulls between sidelobes.
 \item This E/H asymmetry is a fundamental property of linearly polarized aperture antennas: the two planes experience different projections of the vector radiation pattern.
 \end{itemize}
@@ -123,9 +67,18 @@ Observations from Figure~\ref{fig:q1}:
 \section{Q2: Aperture Current Distribution, $f/D=2$ (2 points)}
 %% ====================================================================
 
-For $f/D=2$, the reflector diameter is $D=\SI{2.5}{m}$ and the half-subtended angle is $\theta_0 = 2\arctan(D/(4f)) = 14.25^\circ$. The equivalent aperture currents are computed on a $201\times201$ Cartesian grid using Love's equivalence~\eqref{eq:equiv_currents}.
+For $f/D=2$, the reflector diameter is $D=\SI{2.5}{m}$ and the half-subtended angle is:
+\begin{equation}
+\theta_0 = 2\arctan\!\left(\frac{D}{4f}\right) = 14.25^\circ
+\end{equation}
 
-The aperture field $\vec{E}_a$ is obtained by evaluating the feed far field at angles $(\theta',\phi')$ corresponding to each aperture point via~\eqref{eq:paraboloid}, then applying the GO amplitude taper~\eqref{eq:aperture_taper}.
+The aperture field $\vec{E}_a$ is obtained by evaluating the feed far field at angles $(\theta',\phi')$ corresponding to each aperture point via the paraboloid mapping $\rho' = 2f\tan(\theta'/2)$, then applying the GO amplitude taper $(1+\cos\theta')/(2f)$.
+
+The equivalent aperture currents are computed on a $201\times201$ Cartesian grid using Love's equivalence principle:
+\begin{equation}
+\vec{M}_s = -\hat{z}\times\vec{E}_a, \qquad \vec{J}_s = \hat{z}\times\vec{H}_a = -\frac{1}{\zeta}\vec{E}_a
+\end{equation}
+giving $M_x = E_{a,y}$, $M_y = -E_{a,x}$, $J_x = -E_{a,x}/\zeta$, $J_y = -E_{a,y}/\zeta$.
 
 \begin{figure}[H]
 \centering
@@ -151,7 +104,12 @@ Observations from Figures~\ref{fig:q2_xpol} and~\ref{fig:q2_ypol}:
 \section{Q3: Reflector Far Field, $f/D=1$ (2 points)}
 %% ====================================================================
 
-For $f/D=1$, $D=\SI{5}{m}$, and $\theta_0 = 2\arctan(1/4) = 28.07^\circ$. The aperture currents are computed on a $301\times301$ grid, and the far field is obtained via numerical 2D Fourier transform using the Balanis formulation~\eqref{eq:Eth}--\eqref{eq:Eph}. This formulation ensures proper constructive interference between the electric and magnetic current contributions in the forward direction.
+For $f/D=1$, $D=\SI{5}{m}$, and $\theta_0 = 2\arctan(1/4) = 28.07^\circ$. The aperture currents are computed on a $301\times301$ grid, and the far field is obtained via numerical 2D Fourier transform using the Balanis spatial-domain formulation:
+\begin{align}
+E_\theta &\propto (-L_x\sin\phi + L_y\cos\phi) + \zeta\,(N_x\cos\phi + N_y\sin\phi)\cos\theta \\
+E_\phi &\propto (L_x\cos\phi + L_y\sin\phi)\cos\theta + \zeta\,(N_x\sin\phi - N_y\cos\phi)
+\end{align}
+where $\vec{N} = \iint \vec{J}_s\,e^{j(k_x x'+k_y y')}\,dx'\,dy'$ and $\vec{L} = \iint \vec{M}_s\,e^{j(k_x x'+k_y y')}\,dx'\,dy'$.
 
 The beam is extremely narrow: the theoretical Airy null is at $\arcsin(1.22\lambda/D) = 0.0084^\circ$ for $D=\SI{5}{m}$ at $\lambda=\SI{0.6}{mm}$.
 
@@ -173,7 +131,17 @@ Observations from Figure~\ref{fig:q3}:
 \section{Q4: Efficiencies vs $D$ (3 points)}
 %% ====================================================================
 
-Three efficiencies are computed as a function of reflector diameter $D$ for $0.6 < f/D < 6$ (corresponding to $D$ from \SI{0.83}{m} to \SI{8.33}{m}), using the definitions in~\eqref{eq:spillover}--\eqref{eq:taper}. The feed pattern is pre-computed on a $901\times361$ angular grid.
+Three efficiencies are computed as a function of reflector diameter $D$ for $0.6 < f/D < 6$. The spillover efficiency is:
+\begin{equation}
+\eta_s = \frac{\int_0^{\theta_0}\int_0^{2\pi} U_{\text{feed}}\sin\theta'\,d\theta'\,d\phi'}{\int_0^{\pi/2}\int_0^{2\pi} U_{\text{feed}}\sin\theta'\,d\theta'\,d\phi'}
+\end{equation}
+
+The taper efficiency, using the Ludwig-3 co-pol definition $E_{\text{co}} = E_\theta\sin\phi + E_\phi\cos\phi$, is:
+\begin{equation}
+\eta_t = \frac{16}{\pi}\left(\frac{f}{D}\right)^2 \frac{\left|\int_0^{\theta_0}\int_0^{2\pi} |E_{\text{co}}|\,\tan\!\left(\frac{\theta'}{2}\right)\,d\theta'\,d\phi'\right|^2}{\int_0^{\theta_0}\int_0^{2\pi} G(\theta',\phi')\sin\theta'\,d\theta'\,d\phi'}
+\end{equation}
+
+The aperture efficiency is $\eta_{\text{ap}} = \eta_s\cdot\eta_t$.
 
 \begin{figure}[H]
 \centering
@@ -193,7 +161,10 @@ Observations from Figure~\ref{fig:q4}:
 \section{Q5: Directivity and Gain vs $D$ (2 points)}
 %% ====================================================================
 
-The maximum directivity $D_{\max}$, directivity $D$, and gain $G$ are computed using~\eqref{eq:dir_gain} and plotted in dBi as a function of reflector diameter.
+The maximum directivity, directivity, and gain are:
+\begin{equation}
+D_{\max} = \left(\frac{\pi D}{\lambda}\right)^2, \qquad D = \eta_t\,D_{\max}, \qquad G = \eta_s\,\eta_t\,D_{\max}
+\end{equation}
 
 \begin{figure}[H]
 \centering
@@ -204,7 +175,7 @@ The maximum directivity $D_{\max}$, directivity $D$, and gain $G$ are computed u
 
 Observations from Figure~\ref{fig:q5}:
 \begin{itemize}
-\item $D_{\max}$ increases monotonically with $D$, following the $(\pi D/\lambda)^2$ scaling. At $D=\SI{5}{m}$, $D_{\max} = (\pi\cdot5/\num{0.6e-3})^2 \approx \SI{88.4}{dBi}$. This is purely geometric~--- larger aperture means more collecting area.
+\item $D_{\max}$ increases monotonically with $D$, following the $(\pi D/\lambda)^2$ scaling. At $D=\SI{5}{m}$, $D_{\max} \approx \SI{88.4}{dBi}$. This is purely geometric~--- larger aperture means more collecting area.
 \item \textbf{Directivity} $D$ is reduced from $D_{\max}$ by the taper efficiency. At large $D$ (small $f/D$), the taper loss is substantial (${\sim}$5--6\,dB) because the feed pattern illuminates the aperture very non-uniformly. At small $D$ (large $f/D$), $D$ approaches $D_{\max}$ as taper efficiency is near unity.
 \item \textbf{Gain} $G$ is further reduced by spillover loss. At small $D$ (large $f/D$), the gap between $G$ and $D$ is large (up to 5+\,dB) because most feed power misses the small reflector. At large $D$ (small $f/D$), $G$ is close to $D$ since the big dish captures nearly all feed power ($\eta_s\approx 1$).
 \item The relationship $G \leq D \leq D_{\max}$ always holds. The gap $D_{\max} - G$ in dB equals $-10\log_{10}(\eta_{\text{ap}})$, which is minimized at the optimal $f/D = 2.28$ where $\eta_{\text{ap}} = 0.75$ (loss of only \SI{1.25}{dB}).
