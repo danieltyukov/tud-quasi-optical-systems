@@ -1,5 +1,4 @@
 function set_plot_defaults()
-% Force white-background, black-text plot defaults
     set(groot, 'DefaultFigureColor', 'w');
     set(groot, 'DefaultAxesColor', 'w');
     set(groot, 'DefaultAxesXColor', 'k');

@@ -1,13 +1,7 @@
-%% Q1: Active element pattern vs theta for the FSS.
-% Dipole strips, dx = dy = 20 mm, l = 15 mm, w = 1 mm, free space, 10 GHz.
-% TM incidence in the phi = 0 plane (E-plane scan).
-%
-% AEP(theta_0) = jk_z(theta_0) * G_xx(kx0,ky0) * I(kx0) * Jt(ky0) * i_BF(theta_0)
-% with i_BF = v/Z, v from a unit-amplitude TM plane wave.
+%% Q1: Active element pattern vs incidence angle, TM, phi = 0 plane.
 clear; close all; clc;
 set_plot_defaults();
 
-%% Parameters
 freq    = 10e9;
 c       = 3e8;
 lambda  = c/freq;
@@ -17,26 +11,22 @@ dy      = 20e-3;
 w       = 1e-3;
 l       = 15e-3;
 Mmax    = 30;
-phi0    = 0;            % phi = 0 plane (E-plane)
-V_TM    = 1; V_TE = 0;  % TM incidence
+phi0    = 0;
+V_TM    = 1; V_TE = 0;
 
-%% Theoretical GL onset
-% lambda/d > 1 -> a higher-order Floquet mode enters the visible region at
-% sin(theta_in) = lambda/dx - 1.
 sin_in   = lambda/dx - 1;
 theta_in = asind(sin_in);
 fprintf('Theoretical GL entry: sin(theta_in) = lambda/d - 1 = %.4f\n', sin_in);
 fprintf('                      theta_in       = %.4f deg\n', theta_in);
 
-%% Sweep
 theta_deg = linspace(-89, 89, 1791);
 theta     = deg2rad(theta_deg);
 
 Z   = zeros(size(theta));
 v   = zeros(size(theta));
 iBF = zeros(size(theta));
-EP  = zeros(size(theta));   % element pattern factor jk_z * Gxx * I * Jt
-AEP = zeros(size(theta));   % AEP = EP * iBF
+EP  = zeros(size(theta));
+AEP = zeros(size(theta));
 
 for ti = 1:numel(theta)
     th = theta(ti);
@@ -56,7 +46,6 @@ for ti = 1:numel(theta)
     AEP(ti) = EP(ti) * iBF(ti);
 end
 
-%% Print broadside diagnostics
 [~, i0]  = min(abs(theta_deg));
 fprintf('\nBroadside (theta_0 = 0):\n');
 fprintf('  Z        = %.3f + j(%.3f) Ohm\n', real(Z(i0)), imag(Z(i0)));
@@ -64,11 +53,9 @@ fprintf('  v        = %.4e\n',                 abs(v(i0)));
 fprintf('  i_BF     = %.4e\n',                 abs(iBF(i0)));
 fprintf('  |AEP|^2  = %.4e (linear, peak ref)\n', abs(AEP(i0))^2);
 
-%% Power-pattern normalization (per unit cell) -- |AEP|^2 in dB
 P_AEP    = abs(AEP).^2;
 P_AEP_dB = 10*log10(P_AEP / max(P_AEP));
 
-%% --- Figure 1: AEP vs theta (TM, phi = 0 plane) ---
 fig = figure('Color','w','Position',[80 80 1100 460]);
 set(fig, 'InvertHardcopy', 'off');
 
@@ -98,7 +85,6 @@ sgtitle({'FSS active element pattern -- TM incidence, \phi_0 = 0 plane', ...
         'FontSize', 11, 'FontWeight', 'bold');
 print('-dpng', '-r150', fullfile('..','figures','Q1_AEP_vs_theta.png'));
 
-%% Save numeric data for the report
 save('Q1_AEP_results.mat', 'theta_deg','Z','v','iBF','EP','AEP', ...
      'theta_in','sin_in','freq','k0','lambda','dx','dy','w','l');
 
