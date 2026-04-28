@@ -1,8 +1,13 @@
 function [ej_SGF] = EJ_SGF(er, k, kx, ky)
-% Spectral dyadic Green's function for electric currents in free space.
-% kz branch: real positive for propagating modes, -j*sqrt(...) for evanescent.
+% EJ_SGF - Spectral dyadic Green's function for electric currents (free space).
+%   [ej_SGF] = EJ_SGF(er, k, kx, ky) returns a struct with fields Gxx..Gzz.
+%   The branch of kz is chosen so that propagating modes have real positive
+%   kz and evanescent modes have negative imaginary kz (decay along |z|).
+
     zeta = 120 * pi / sqrt(er);
+
     kz = -1j * sqrt(-(k^2 - kx.^2 - ky.^2));
+
     prefactor = -zeta ./ (2 * k * kz);
 
     ej_SGF.Gxx = prefactor .* (k^2 - kx.^2);

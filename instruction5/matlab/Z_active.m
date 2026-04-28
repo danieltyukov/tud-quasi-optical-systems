@@ -1,8 +1,5 @@
 function Z = Z_active(theta0, phi0, k0, dx, dy, w, l, Mmax)
-% Z_active - Active input impedance of an infinite array of printed dipoles.
-%   Z = -1/(dx*dy) * sum_{mx,my} G_xx^{ej}(kxm, kym) * I(kxm)^2 * Jt(kym)^2
-%   with kxm = kx0 - 2*pi*mx/dx, kym = ky0 - 2*pi*my/dy.
-
+% Active input impedance, infinite array of printed dipoles.
     kx0 = k0 * sin(theta0) * cos(phi0);
     ky0 = k0 * sin(theta0) * sin(phi0);
 

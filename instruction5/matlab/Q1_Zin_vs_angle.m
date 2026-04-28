@@ -1,17 +1,14 @@
 %% Q1: Active input impedance vs scan angle for E, H, D planes.
-% Two unit-cell sizes (15 mm and 20 mm), printed sinusoidal-current dipoles
-% (l = 14 mm, w = 1 mm) on a free-space rectangular grid at 10 GHz.
 clear; close all; clc;
 set_plot_defaults();
 
-%% Parameters
 freq    = 10e9;
 c       = 3e8;
 lambda  = c/freq;
 k0      = 2*pi/lambda;
 w       = 1e-3;
 l       = 14e-3;
-Mmax    = 30;          % Floquet truncation, |m| <= Mmax in each direction
+Mmax    = 30;
 
 cases = struct( ...
     'name',  {'15 mm', '20 mm'}, ...
@@ -19,7 +16,7 @@ cases = struct( ...
     'dx',    {15e-3,   20e-3}, ...
     'dy',    {15e-3,   20e-3});
 
-% Scan angles: avoid exact endfire to keep the fundamental kz=0 spike finite
+% Avoid exact endfire; the fundamental kz=0 spike is otherwise unbounded.
 theta_deg = linspace(-89, 89, 1441);
 theta     = deg2rad(theta_deg);
 
@@ -29,11 +26,8 @@ planes = struct( ...
     'phi',   {0, pi/2, pi/4});
 
 plane_styles = {'-', '--', '-.'};
-plane_colors = [0 0.45 0.74;        % E   blue
-                0.85 0.33 0.10;     % H   orange-red
-                0.47 0.67 0.19];    % D   green
+plane_colors = [0 0.45 0.74; 0.85 0.33 0.10; 0.47 0.67 0.19];
 
-%% Compute Z_in for every (case, plane, theta)
 fprintf('Computing Z_in...\n');
 results = cell(numel(cases), numel(planes));
 for ci = 1:numel(cases)
@@ -48,12 +42,11 @@ for ci = 1:numel(cases)
     end
 end
 
-%% --- Figure 1: Re/Im of Z_in vs theta, two rows (cases) x two cols (Re, Im) ---
+%% Re/Im of Z_in vs theta
 fig = figure('Color','w','Position',[80 80 1200 850]);
 set(fig, 'InvertHardcopy', 'off');
 
 for ci = 1:numel(cases)
-    % --- Resistance ---
     subplot(numel(cases), 2, 2*(ci-1)+1); hold on; grid on;
     h = gobjects(1, numel(planes));
     for pi_ = 1:numel(planes)
@@ -67,7 +60,6 @@ for ci = 1:numel(cases)
         legend(h, {planes.name}, 'Location', 'north', 'NumColumns', 3);
     end
 
-    % --- Reactance ---
     subplot(numel(cases), 2, 2*(ci-1)+2); hold on; grid on;
     for pi_ = 1:numel(planes)
         plot(theta_deg, imag(results{ci,pi_}), plane_styles{pi_}, ...
@@ -77,9 +69,7 @@ for ci = 1:numel(cases)
     title(sprintf('d_x = d_y = %s   —   Im\\{Z_{in}\\}', cases(ci).name));
     xlim([-90 90]); ylim([-350 350]); xticks(-90:30:90);
 
-    % Mark the H-plane GL entry for the 20 mm case
     if ci == 2
-        % theta_GL = asind(lambda/dy - 1)
         thG = asind(lambda/cases(ci).dy - 1);
         subplot(numel(cases), 2, 2*(ci-1)+1);
         xline(+thG, 'k:', 'LineWidth', 1, 'Alpha', 0.5);
@@ -96,7 +86,7 @@ sgtitle({'Active input impedance of an infinite array of printed dipoles', ...
         'FontSize', 11, 'FontWeight', 'bold');
 print('-dpng', '-r150', fullfile('..','figures','Q1_Zin_vs_angle.png'));
 
-%% --- Figure 2: |Z_in| on log scale -- captures all singularities at once ---
+%% |Z_in| log scale
 fig2 = figure('Color','w','Position',[80 80 1200 450]);
 set(fig2, 'InvertHardcopy', 'off');
 for ci = 1:numel(cases)
@@ -123,7 +113,7 @@ sgtitle('|Z_{in}| vs scan angle (log scale): singularities at the H-plane GL ent
         'FontSize', 11, 'FontWeight', 'bold');
 print('-dpng', '-r150', fullfile('..','figures','Q1_Zin_magnitude.png'));
 
-%% --- Figure 3: zoom on the H-plane scan-blindness for 20 mm ---
+%% Zoom on H-plane scan blindness, 20 mm
 fig3 = figure('Color','w','Position',[80 80 1100 400]);
 set(fig3, 'InvertHardcopy', 'off');
 ZH20 = results{2, 2};
@@ -148,7 +138,7 @@ sgtitle('Scan blindness in the H-plane: Floquet mode (m_y = \pm 1) enters at \th
         'FontSize', 11, 'FontWeight', 'bold');
 print('-dpng', '-r150', fullfile('..','figures','Q1_Zin_zoom_Hplane_20mm.png'));
 
-%% --- Save numeric data for the report ---
+%% Save and report
 broadside = struct();
 for ci = 1:numel(cases)
     Z0 = Z_active(0, 0, k0, cases(ci).dx, cases(ci).dy, w, l, Mmax);
@@ -160,7 +150,6 @@ fprintf('\nBroadside Z_in:\n');
 fprintf('  15 mm: Z = %.3f + j(%.3f) Ohm\n', real(broadside.c15mm), imag(broadside.c15mm));
 fprintf('  20 mm: Z = %.3f + j(%.3f) Ohm\n', real(broadside.c20mm), imag(broadside.c20mm));
 
-% Numeric peak in Re for 20 mm H-plane (clipped, for comment in report)
 [mx_, ix] = max(real(results{2,2}));
 fprintf('\n20 mm H-plane peak Re{Z}: %.1f Ohm at theta = %.2f deg (numerical, grid-limited)\n', ...
         mx_, theta_deg(ix));
