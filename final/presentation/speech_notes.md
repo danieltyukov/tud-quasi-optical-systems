@@ -3,124 +3,126 @@
 **Ka-band Satcom Dipole Array with Backing Reflector**
 Daniel Tyukov | 5714699
 
-> *Tight script: ~11 min of clean reading time, ~15 min with normal speech pace and filler words. Slow down on the figures, speed up on the bullet slides.*
+> *Trimmed for ~9 min clean reading, so with normal pace and filler words it lands comfortably under 15. Slow on figure slides (8, 11, 13). Fast on bullet slides (3, 4, 7, 14).*
 
 ---
 
-## Slide 1 — Title  *(~15 s)*
+## Slide 1 — Title  *(~10 s)*
 
-Good morning. I'm Daniel Tyukov. I'll present my final project, number 8.2 — a Ka-band Satcom dipole array with a backing reflector.
-
----
-
-## Slide 2 — Why Ka-band Satcom-on-the-move  *(~45 s)*
-
-The application is in-flight Satcom: a flat phased array on the fuselage skin pointing at a geostationary satellite. The Ka-band transmit window is twenty-seven and a half to thirty-one gigahertz — twelve percent fractional bandwidth.
-
-I picked a dipole over a PEC backing because it's low-profile, single-layer, and naturally resonant in this kind of bandwidth. The aircraft moves, so the array has to scan electronically, and the spec asks for a two-degree pencil beam.
+Good morning. I'm Daniel Tyukov, and I'll present my final project — number 8.2 — a Ka-band Satcom dipole array with a backing reflector.
 
 ---
 
-## Slide 3 — Specifications and free design parameters  *(~35 s)*
+## Slide 2 — Why Ka-band Satcom-on-the-move  *(~35 s)*
 
-Three hard specs: active reflection coefficient below minus ten decibels across the band, half-power beamwidth of two degrees, and no grating lobes or scan blindness.
+The setting on the right is in-flight Satcom — a flat phased array bonded to the aircraft skin, talking to a geostationary satellite while the plane is in motion. The transmit window runs from twenty-seven and a half to thirty-one gigahertz, so roughly twelve percent fractional bandwidth.
 
-Free parameters: dipole length and width, reflector height, lattice periods, and the feed reference impedance.
-
----
-
-## Slide 4 — Approach in one slide  *(~30 s)*
-
-I reused the periodic Method-of-Moments code from Assignments five and six. The only thing that genuinely changes is the spectral Green's function, which now has to know about the backing reflector. After that I sweep the geometry, check the scan behaviour, and size the array for the two-degree beam.
+I'm using printed dipoles over a PEC backing — single-layer, low-profile, and broadband enough for that window. Since the aircraft moves, the array has to scan electronically, and the spec at the bottom asks for a two-degree pencil beam with the active reflection coefficient below minus ten decibels across the band.
 
 ---
 
-## Slide 5 — Theory recap: active impedance  *(~45 s)*
+## Slide 3 — Specifications and free design parameters  *(~25 s)*
 
-This is the kernel result. The active input impedance of an infinite array is a discrete Floquet sum: spectral Green's function at the Floquet wavenumber, times the squared Fourier transform of the basis function.
-
-It splits into the fundamental mode that radiates, and a reactive higher-order tail from inter-cell coupling. Twenty-five modes per axis is converged to within one percent — same truncation I validated in Assignment five.
+On the left are the three hard requirements: active reflection below minus ten decibels, half-power beamwidth of two degrees, and no grating lobes or scan blindness anywhere we plan to scan. On the right are the knobs I'm allowed to turn — dipole length, width, reflector height, the two lattice periods, and the feed reference impedance. The little side-view shows how those parameters fit together.
 
 ---
 
-## Slide 6 — The image-theorem Green's function  *(~50 s)*
+## Slide 4 — Approach in one slide  *(~20 s)*
 
-This is the only mathematical change. A horizontal current at height h above a PEC has an image at minus h with opposite sign. Adding source and image, the spectral Green's function picks up a factor of one minus the exponential of minus j twice k z h.
-
-At broadside this becomes four sine squared of k z h, peaking at four when h is a quarter wavelength — that's where the textbook number comes from. As a free bonus, the same factor exponentially attenuates the evanescent higher-order modes, taming the inductive reactance we saw in Assignment five.
+Five steps. I reuse the periodic Method-of-Moments code from Assignments five and six, replace the free-space Green's function with one that includes the PEC image, sweep the design space at broadside, verify scanning behaviour, then size the array for the beamwidth target.
 
 ---
 
-## Slide 7 — Lattice choice: sub-half-wave  *(~40 s)*
+## Slide 5 — Theory recap: active impedance  *(~40 s)*
 
-A first-order Floquet mode enters the visible region when sine theta-G-L equals lambda over d minus one. To keep that above unity at the highest frequency, the lattice has to be smaller than half the smallest in-band wavelength.
+The boxed equation at the top is the kernel result. Galerkin plus Floquet reduces the integral equation to a discrete sum: spectral Green's function at the Floquet wavenumber, times the squared Fourier transform of the basis function, summed over all modes.
 
-The smallest in-band wavelength is just under ten millimetres, so I picked four point eight. Lambda over d stays above two everywhere in the band — no grating lobes at any scan angle, and as a bonus, no Wood-Rayleigh scan-blindness either.
-
----
-
-## Slide 8 — Q1 design sweep at broadside  *(~60 s)*
-
-I swept dipole length, reflector height, and feed impedance, and minimised the worst-case in-band reflection.
-
-Top-left: input impedance. The real part crosses one hundred ohms in the centre of the band. Top-right: the active reflection coefficient is minus seventeen and a half decibels in the worst part of the band — seven and a half decibels of margin below spec. The red curve shows what happens without the reflector — barely minus three decibels, well out of spec.
-
-Bottom-left contour shows the design region; my point sits comfortably inside it. Bottom-right confirms one hundred ohms is the optimum feed reference.
+On the right is the decomposition I'll use throughout. The fundamental mode Z-zero-zero is the part that radiates into the main beam. Z-h-o is the sum over higher-order evanescent modes — that's the reactive near-field coupling between cells. Twenty-five modes per axis is converged to within one percent.
 
 ---
 
-## Slide 9 — The reflector is what makes the bandwidth  *(~45 s)*
+## Slide 6 — The one new ingredient: image-theorem Green's function  *(~45 s)*
 
-Two design choices worth flagging. First: I'm using h equals one fifth of a wavelength, not a quarter. Quarter wavelength makes the resonance sharp; a shorter reflector flattens it and broadens the band, which I need for twelve percent bandwidth.
+This is the only mathematical change in the project. The cartoon on the right shows a horizontal x-directed current at height h above a PEC, with its image at minus h carrying the opposite sign. Adding source and image, the spectral Green's function picks up the multiplier in the boxed equation — one minus the exponential of minus j twice k-z h.
 
-Second: the dipole is forced up against the cell boundary at four point five millimetres. A half-wave dipole would be five point one — too long for the cell. So the dipole resonance lands just above the centre frequency, and Re-Z stays in the matching window across the band.
-
----
-
-## Slide 10 — Q2 grating-lobe diagrams  *(~40 s)*
-
-Visual confirmation. Each panel is a grating-lobe diagram at one in-band frequency. Blue disc is the visible region; grey circles are the higher-order Floquet circles.
-
-Even at thirty-one gigahertz, where lambda over d is at its smallest, the grey circles still sit outside the visible region. The dashed lines are the E and H scan trajectories — they stay entirely inside. So: no grating lobes anywhere in the band.
+For the propagating modes, the magnitude squared of that factor is four sine squared of k-z h. At broadside with h equal to a quarter wavelength, k-z h is pi over two, the factor becomes two, and the radiation resistance doubles. For evanescent modes, the same factor decays exponentially in k-z h — and that's what tames the inductive reactance we struggled with in the unbacked case.
 
 ---
 
-## Slide 11 — Q2 scan study  *(~55 s)*
+## Slide 7 — Lattice choice: sub-half-wave to defeat grating lobes  *(~30 s)*
 
-Active reflection coefficient versus scan angle, in all three principal planes, at the band edges and centre.
+The condition for a first-order Floquet mode to enter the visible region is shown at the top — sine theta-G-L equals lambda over dₓ minus one. Keeping that above unity at the highest frequency means dₓ has to be smaller than half the smallest in-band wavelength.
 
-The dashed red lines mark where the worst case across frequencies crosses minus ten decibels. E-plane gives twenty-eight degrees, H-plane thirty-seven, D-plane forty-three. The system limit is the worst plane and worst frequency — twenty-eight degrees in the E-plane at the high band edge.
-
-The curves are smooth — no Wood-anomaly spikes — exactly because the lattice is sub-half-wave. The roll-off is just smooth scan loss.
+The smallest wavelength is nine point six seven millimetres, so I picked four point eight. The table confirms lambda over d stays above two everywhere in the band, so the answer in every row is yes, grating-lobe-free.
 
 ---
 
-## Slide 12 — Why the E-plane is the bottleneck  *(~45 s)*
+## Slide 8 — Q1 design sweep at broadside  *(~65 s)*
 
-Worth a quick comment, because students usually expect the H-plane to be worse.
+This is the headline result for the broadside design — let me walk through the four panels.
 
-H-plane: scan moves along k-y, basis transform is unchanged, only one over cos theta in the wave impedance — so resistance grows with scan.
+**Top-left** is the active input impedance. The blue solid curve is the resistance, the red dashed curve is the reactance, and you can see the resistance crosses the hundred-ohm line right in the middle of the band — exactly where I want it.
 
-E-plane: scan moves along k-x, which directly attacks the basis Fourier transform, and there's a cos-theta factor on top. Re-Z drops below the matching window first. That's why the E-plane limit is twenty-eight degrees — about ten less than the H-plane.
+**Top-right** is the active reflection coefficient. The blue curve is my optimised design, hitting minus seventeen and a half decibels in the worst part of the band — seven and a half decibels of margin below the minus-ten spec line. The red dashed curve is what happens **without** the reflector — barely minus three decibels, well out of spec.
 
----
-
-## Slide 13 — Q3 array sizing  *(~50 s)*
-
-Two-degree half-power beamwidth. From the closed-form expression — zero point eight eight six lambda over array length — the worst case is the lowest frequency, where lambda is largest. The table gives fifty-eight elements at twenty-seven and a half gigahertz, fifty-five at the centre, fifty-two at thirty-one.
-
-The figure is the numerical check: simulation overlaps the closed form perfectly. Fifty-five per side gives one point nine seven degrees at the centre — just under spec. So my recommendation is fifty-five by fifty-five, three thousand and twenty-five elements. Fifty-eight by fifty-eight if you want strict worst-case across the whole band.
+**Bottom-left** is a contour of the worst in-band reflection in the dipole-length, reflector-height plane. The red star is where my design sits — comfortably inside the dark region. **Bottom-right** confirms the feed-impedance choice — there's a clear minimum at one hundred ohms, marked by the red star.
 
 ---
 
-## Slide 14 — Q3 beamwidth across the band  *(~30 s)*
+## Slide 9 — The reflector is what makes the bandwidth  *(~35 s)*
 
-Just for context. Beamwidth scales as one over frequency, so the fifty-five-by-fifty-five design narrows to one point eight five degrees at the high band edge and widens to two point zero nine at the low edge — a four percent overshoot, which I consider a non-issue.
+The left box collects the final unit-cell numbers, and at the bottom you can see the worst-case reflection — minus seventeen and a half decibels with the reflector, only minus three without it.
+
+Two design choices on the right worth flagging. First, h is one over five point five of a wavelength — a shorter reflector than a quarter wavelength flattens the resonance and broadens the band, which is what I need for twelve percent bandwidth. Second, the dipole length is ninety-five percent of the cell — pushing it as long as the geometry allows places the dipole resonance just above centre frequency, keeping the resistance in the matching window across the band.
 
 ---
 
-## Slide 15 — Conclusions  *(~45 s)*
+## Slide 10 — No grating lobes anywhere in the band  *(~30 s)*
 
-To wrap up. One mathematical change — the image-theorem Green's function — drives the entire result. The chosen unit cell hits minus seventeen and a half decibels at broadside, seven and a half below spec. The sub-half-wave lattice rules out grating lobes and scan blindness. The system scan limit is plus or minus twenty-eight degrees, set by the E-plane at the high band edge. And fifty-five by fifty-five elements deliver the two-degree pencil beam.
+Visual confirmation of the lattice choice. Each panel is a grating-lobe diagram at one frequency in the band. The blue disc is the visible region, and the grey circles are the higher-order Floquet centres.
+
+You can see that even at thirty-one gigahertz, in the right-hand panel where lambda over d is at its smallest, the visible region still doesn't touch any of the grey circles. So no grating lobes anywhere in the band.
+
+---
+
+## Slide 11 — Q2 scan study — three planes, three frequencies  *(~50 s)*
+
+Active reflection coefficient versus scan angle, in the three principal planes — E-plane on the left, H-plane in the middle, D-plane on the right — with three frequencies overlaid in each panel.
+
+The horizontal grey line at minus ten decibels is the spec, and the **red dashed verticals** mark the scan angle where the worst-case curve crosses it. Reading off those verticals: twenty-eight degrees in the E-plane, thirty-seven in the H-plane, forty-three in the D-plane. The system limit is whichever plane fails first at whichever frequency fails first — twenty-eight degrees in the E-plane at the high band edge.
+
+The other thing to notice is how smooth the curves are — no sharp spikes. That smoothness is the payoff for the sub-half-wave lattice.
+
+---
+
+## Slide 12 — Why is the E-plane the bottleneck?  *(~40 s)*
+
+The boxed equation at the top is the fundamental Floquet term of the active impedance on the principal scan trajectory. The two columns specialise it to the H-plane and E-plane.
+
+In the H-plane, kₓ-zero stays at zero, so the basis Fourier transform doesn't see the scan at all. The only effect is one over cosine theta in the wave impedance — the resistance just grows smoothly with scan, easy to keep matched.
+
+In the E-plane, the scan moves kₓ-zero directly into the basis Fourier transform, which rolls off, and there's a cosine theta on top. The resistance drops fast, and the match hits minus ten decibels first. That's the mechanism behind the twenty-eight-degree limit.
+
+---
+
+## Slide 13 — Q3 array sizing for two-degree HPBW  *(~50 s)*
+
+The closed-form expression on the left — zero point eight eight six lambda over N times d — tells me how many elements I need. The worst case is the lowest frequency, where lambda is largest. The table gives fifty-eight elements at twenty-seven and a half gigahertz, fifty-five at the centre, fifty-two at thirty-one.
+
+On the right, the upper plot shows windowed array patterns at centre frequency for several values of N, with the half-power line at minus three decibels. The lower plot is the numerical check — beamwidth versus N — and you can see the simulation in blue overlapping the closed-form prediction in orange, crossing the two-degree target right at N equals fifty-five.
+
+So my recommendation is fifty-five by fifty-five — three thousand and twenty-five elements. Fifty-eight by fifty-eight if you want strict compliance at the worst-case frequency.
+
+---
+
+## Slide 14 — Beamwidth across the band  *(~20 s)*
+
+Just for context. The pattern on the left shows the chosen fifty-five-by-fifty-five array at three frequencies, and the table on the right gives the numbers — one point eight five degrees at the high edge, widening to two point zero nine at the low edge. A four percent overshoot at the bottom of the band, which I consider acceptable.
+
+---
+
+## Slide 15 — Conclusions  *(~30 s)*
+
+To wrap up. One mathematical change — the image-theorem Green's function — drove the entire result. The unit cell hits minus seventeen and a half decibels at broadside, seven and a half below spec. The sub-half-wave lattice rules out grating lobes and scan blindness. The system scan limit is plus or minus twenty-eight degrees, set by the E-plane at the high band edge. And fifty-five by fifty-five elements deliver the two-degree pencil beam.
 
 Thank you — happy to take questions.
