@@ -43,29 +43,29 @@ On the right is the decomposition I'll use throughout. The fundamental mode Z-ze
 
 ## Slide 6 — The one new ingredient: image-theorem Green's function  *(~45 s)*
 
-This is the only mathematical change in the project. The cartoon on the right shows a horizontal x-directed current at height h above a PEC, with its image at minus h carrying the opposite sign. Adding source and image, the spectral Green's function picks up the multiplier in the boxed equation — one minus the exponential of minus j twice k-z h.
+This is the only mathematical change. A horizontal current at height h above a PEC has an image at minus h with opposite sign. Adding source and image, the spectral Green's function picks up a factor of one minus the exponential of minus j twice k z h.
 
-For the propagating modes, the magnitude squared of that factor is four sine squared of k-z h. At broadside with h equal to a quarter wavelength, k-z h is pi over two, the factor becomes two, and the radiation resistance doubles. For evanescent modes, the same factor decays exponentially in k-z h — and that's what tames the inductive reactance we struggled with in the unbacked case.
+At broadside this becomes four sine squared of k z h, peaking at four when h is a quarter wavelength — that's where the textbook number comes from. As a free bonus, the same factor exponentially attenuates the evanescent higher-order modes, taming the inductive reactance we saw in Assignment five.
+
 
 ---
 
 ## Slide 7 — Lattice choice: sub-half-wave to defeat grating lobes  *(~30 s)*
 
-The condition for a first-order Floquet mode to enter the visible region is shown at the top — sine theta-G-L equals lambda over dₓ minus one. Keeping that above unity at the highest frequency means dₓ has to be smaller than half the smallest in-band wavelength.
+A first-order Floquet mode enters the visible region when sine theta-G-L equals lambda over d minus one. To keep that above unity at the highest frequency, the lattice has to be smaller than half the smallest in-band wavelength.
 
-The smallest wavelength is nine point six seven millimetres, so I picked four point eight. The table confirms lambda over d stays above two everywhere in the band, so the answer in every row is yes, grating-lobe-free.
+The smallest in-band wavelength is just under ten millimetres, so I picked four point eight. Lambda over d stays above two everywhere in the band — no grating lobes at any scan angle, and as a bonus, no Wood-Rayleigh scan-blindness either.
+
 
 ---
 
 ## Slide 8 — Q1 design sweep at broadside  *(~65 s)*
 
-This is the headline result for the broadside design — let me walk through the four panels.
+I swept dipole length, reflector height, and feed impedance, and minimised the worst-case in-band reflection.
 
-**Top-left** is the active input impedance. The blue solid curve is the resistance, the red dashed curve is the reactance, and you can see the resistance crosses the hundred-ohm line right in the middle of the band — exactly where I want it.
+Top-left: input impedance. The real part crosses one hundred ohms in the centre of the band. Top-right: the active reflection coefficient is minus seventeen and a half decibels in the worst part of the band — seven and a half decibels of margin below spec. The red curve shows what happens without the reflector — barely minus three decibels, well out of spec.
 
-**Top-right** is the active reflection coefficient. The blue curve is my optimised design, hitting minus seventeen and a half decibels in the worst part of the band — seven and a half decibels of margin below the minus-ten spec line. The red dashed curve is what happens **without** the reflector — barely minus three decibels, well out of spec.
-
-**Bottom-left** is a contour of the worst in-band reflection in the dipole-length, reflector-height plane. The red star is where my design sits — comfortably inside the dark region. **Bottom-right** confirms the feed-impedance choice — there's a clear minimum at one hundred ohms, marked by the red star.
+Bottom-left contour shows the design region; my point sits comfortably inside it. Bottom-right confirms one hundred ohms is the optimum feed reference.
 
 ---
 
@@ -87,11 +87,11 @@ You can see that even at thirty-one gigahertz, in the right-hand panel where lam
 
 ## Slide 11 — Q2 scan study — three planes, three frequencies  *(~50 s)*
 
-Active reflection coefficient versus scan angle, in the three principal planes — E-plane on the left, H-plane in the middle, D-plane on the right — with three frequencies overlaid in each panel.
+Active reflection coefficient versus scan angle, in all three principal planes, at the band edges and centre.
 
-The horizontal grey line at minus ten decibels is the spec, and the **red dashed verticals** mark the scan angle where the worst-case curve crosses it. Reading off those verticals: twenty-eight degrees in the E-plane, thirty-seven in the H-plane, forty-three in the D-plane. The system limit is whichever plane fails first at whichever frequency fails first — twenty-eight degrees in the E-plane at the high band edge.
+The dashed red lines mark where the worst case across frequencies crosses minus ten decibels. E-plane gives twenty-eight degrees, H-plane thirty-seven, D-plane forty-three. The system limit is the worst plane and worst frequency — twenty-eight degrees in the E-plane at the high band edge.
 
-The other thing to notice is how smooth the curves are — no sharp spikes. That smoothness is the payoff for the sub-half-wave lattice.
+The curves are smooth — no Wood-anomaly spikes — exactly because the lattice is sub-half-wave. The roll-off is just smooth scan loss.
 
 ---
 
@@ -107,17 +107,15 @@ In the E-plane, the scan moves kₓ-zero directly into the basis Fourier transfo
 
 ## Slide 13 — Q3 array sizing for two-degree HPBW  *(~50 s)*
 
-The closed-form expression on the left — zero point eight eight six lambda over N times d — tells me how many elements I need. The worst case is the lowest frequency, where lambda is largest. The table gives fifty-eight elements at twenty-seven and a half gigahertz, fifty-five at the centre, fifty-two at thirty-one.
+Two-degree half-power beamwidth. From the closed-form expression — zero point eight eight six lambda over array length — the worst case is the lowest frequency, where lambda is largest. The table gives fifty-eight elements at twenty-seven and a half gigahertz, fifty-five at the centre, fifty-two at thirty-one.
 
-On the right, the upper plot shows windowed array patterns at centre frequency for several values of N, with the half-power line at minus three decibels. The lower plot is the numerical check — beamwidth versus N — and you can see the simulation in blue overlapping the closed-form prediction in orange, crossing the two-degree target right at N equals fifty-five.
-
-So my recommendation is fifty-five by fifty-five — three thousand and twenty-five elements. Fifty-eight by fifty-eight if you want strict compliance at the worst-case frequency.
+The figure is the numerical check: simulation overlaps the closed form perfectly. Fifty-five per side gives one point nine seven degrees at the centre — just under spec. So my recommendation is fifty-five by fifty-five, three thousand and twenty-five elements. Fifty-eight by fifty-eight if you want strict worst-case across the whole band.
 
 ---
 
 ## Slide 14 — Beamwidth across the band  *(~20 s)*
 
-Just for context. The pattern on the left shows the chosen fifty-five-by-fifty-five array at three frequencies, and the table on the right gives the numbers — one point eight five degrees at the high edge, widening to two point zero nine at the low edge. A four percent overshoot at the bottom of the band, which I consider acceptable.
+Just for context. Beamwidth scales as one over frequency, so the fifty-five-by-fifty-five design narrows to one point eight five degrees at the high band edge and widens to two point zero nine at the low edge — a four percent overshoot, which I consider a non-issue.
 
 ---
 
